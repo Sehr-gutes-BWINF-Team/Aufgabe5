@@ -18,7 +18,7 @@ public class FileReader {
     private final boolean useTestResources;
 
     @SneakyThrows
-    public Graph read(String name){
+    public Graph read(String name) {
         File file = new File(getCurrentPath(useTestResources) + name + ".txt");
         Scanner scanner = new Scanner(file);
         Set<Node> nodes = new HashSet<>();
@@ -26,7 +26,7 @@ public class FileReader {
         boolean skip = true;
         while (scanner.hasNextLine()) {
             String data = scanner.nextLine();
-            if(skip){
+            if (skip) {
                 skip = false;
                 continue;
             }
@@ -41,32 +41,32 @@ public class FileReader {
         return new Graph(nodes, edges);
     }
 
-    private void insertEdge(Set<Edge> edges, Node a, Node b){
+    private void insertEdge(Set<Edge> edges, Node a, Node b) {
         Edge edge = new Edge(a, b);
-        if(edges.contains(edge)){
+        if (edges.contains(edge)) {
             return;
         }
         edges.add(edge);
     }
 
-    private void insertNode(Set<Node> nodes, Node node){
-        if(nodes.contains(node)){
+    private void insertNode(Set<Node> nodes, Node node) {
+        if (nodes.contains(node)) {
             return;
         }
         nodes.add(node);
     }
 
-    private Node parseNode(String string){
+    private Node parseNode(String string) {
         final int i = Integer.parseInt(string);
         return new Node(i);
     }
 
-    private String getCurrentPath(boolean useTestResources){
+    private String getCurrentPath(boolean useTestResources) {
         return useTestResources ? getCurrentPathDev() : getCurrentPathProd();
     }
 
     @SneakyThrows
-    private String getCurrentPathProd(){
+    private String getCurrentPathProd() {
         String path = new File(Main.class.getProtectionDomain()
                 .getCodeSource().getLocation().toURI()).getPath();
         String[] splits = path.split("[/\\\\]");
@@ -77,7 +77,7 @@ public class FileReader {
         return stringBuilder.toString();
     }
 
-    private String getCurrentPathDev(){
+    private String getCurrentPathDev() {
         return new File("").getAbsolutePath()
                 + "/src/test/resources/";
     }
