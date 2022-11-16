@@ -74,7 +74,7 @@ public class FileReader {
         for (int i = 0; i < splits.length - 1; i++) {
             stringBuilder.append(splits[i]).append("/");
         }
-        return stringBuilder.toString();
+        return stringBuilder.append("resources/").toString();
     }
 
     private String getCurrentPathDev() {

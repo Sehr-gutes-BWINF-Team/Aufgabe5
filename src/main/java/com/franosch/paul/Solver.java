@@ -23,31 +23,6 @@ public class Solver {
         FileReader fileReader = new FileReader(useTestResources);
         final Graph graph = fileReader.read("huepfburg" + number);
 
-/*        for (Map.Entry<Node, Set<Node>> nodeSetEntry : graph.getNeighbours().entrySet()) {
-            System.out.println(nodeSetEntry.getKey() + "'s neighbours: " + nodeSetEntry.getValue());
-       }
-
-        Node a = new Node(1);
-        Node b = new Node(2);
-        
-        for (int i = 0; i < 200; i++) {
-            Set<List<Node>> pathsFromA = showNeighbours(graph, a, i);
-            Set<List<Node>> pathsFromB = showNeighbours(graph, b, i);
-            for (List<Node> pathA : pathsFromA) {
-                for (List<Node> pathB : pathsFromB) {
-                    final Node nodeA = pathA.get(pathA.size() - 1);
-                    final Node nodeB = pathB.get(pathB.size() - 1);
-                    if(nodeA.equals(nodeB)){
-                        System.out.println(pathA);
-                        System.out.println(pathB);
-                        System.out.println(pathA.size());
-                        return;
-                    }
-                }
-            }
-        }*/
-
-
         final int cap = 10000;
 
         Result result = findTargetNode(graph, cap);
@@ -61,10 +36,10 @@ public class Solver {
         Set<List<Node>> pathFromB = showNeighbours(graph, b, result.node, result.steps);
 
         for (final List<Node> nodes : pathFromA) {
-            System.out.println("Path from a: " + nodes);
+            System.out.println("Pfad von 1 nach " + result.node.id() + ": " + nodes);
         }
         for (final List<Node> nodes : pathFromB) {
-            System.out.println("Path from b: " + nodes);
+            System.out.println("Pfad von 2 nach " + result.node.id() + ": " + nodes);
         }
 
     }
@@ -81,14 +56,16 @@ public class Solver {
 
             for (int j = 0; j < reachableFirst.length; j++) {
                 if (reachableFirst[j] != 0 && reachableFirst[j] == reachableSecond[j]) {
-                    System.out.println("MATRIX " + exp);
-                    System.out.println("SOLUTION WITH STEPS " + i + " IS NODE " + (j + 1));
+                    // System.out.println("MATRIX " + exp);
+                    System.out.println("SOLUTION IS NODE " + (j + 1) + " IN " + i + " STEPS");
                     return new Result(i, new Node(j + 1));
                 }
             }
 
             if (isNew(previous, exp)) {
-                throw new IllegalArgumentException("PROBLEM SET CAN NOT BE SOLVED, REPEATING PATTERN AT STEP " + (previous.size() + 1));
+                System.out.println("Es ist nicht möglich den Parkour erfolgreich zu absolvieren, Matrix in Schritt "
+                        + (previous.size() + 1) + " ist identisch zu einer vorherigen Matrix.");
+                System.exit(0);
             }
             previous.add(exp);
 
@@ -114,7 +91,8 @@ public class Solver {
         return paths;
     }
 
-    private void showNeighbours(Graph graph, Node current, Node target, int depth, List<Node> path, Set<List<Node>> paths, int steps) {
+    private void showNeighbours(Graph graph, Node current, Node target, int depth,
+                                List<Node> path, Set<List<Node>> paths, int steps) {
         if (solutionFound) return;
         path.add(current);
         // System.out.println("current " + current + " target " + target + " depth " + depth + " steps " + steps);
