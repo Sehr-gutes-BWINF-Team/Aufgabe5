@@ -30,7 +30,7 @@ public class SolverTest {
 
     @Test
     void solve() {
-        Solver solver = new Solver(4, true);
+        Solver solver = new Solver(3, true);
         solver.solve();
     }
 

@@ -72,6 +72,7 @@ public class Solver {
     private Result findTargetNode(Graph graph, int cap) {
         Matrix matrix = graph.toAdjacencyMatrix();
 
+        List<Matrix> previous = new ArrayList<>();
 
         for (int i = 1; i < cap; i++) {
             Matrix exp = MatrixManipulator.expButMakeItStupid(matrix, i);
@@ -85,9 +86,26 @@ public class Solver {
                     return new Result(i, new Node(j + 1));
                 }
             }
+
+            if (isNew(previous, exp)) {
+                throw new IllegalArgumentException("PROBLEM SET CAN NOT BE SOLVED, REPEATING PATTERN AT STEP " + (previous.size() + 1));
+            }
+            previous.add(exp);
+
         }
         System.out.println("No solution found in range 0 to " + cap);
         return null;
+    }
+
+    private boolean isNew(List<Matrix> matrices, Matrix matrix) {
+        for (int i = 0; i < matrices.size(); i++) {
+            final Matrix current = matrices.get(i);
+            if (current.equals(matrix)) {
+                System.out.println(matrix + " is the same as matrix with index " + i + ": " + current);
+                return true;
+            }
+        }
+        return false;
     }
 
     private Set<List<Node>> showNeighbours(Graph graph, Node start, Node target, int steps) {
