@@ -31,13 +31,8 @@ public class SolverTest {
     @Test
     void solve0() {
         Solver solver = new Solver(4, true);
-        solver.solve();
+        Assertions.assertDoesNotThrow(solver::solve);
     }
 
-    @Test
-    void solve4(){
-        Solver solver = new Solver(3, true);
-        Assertions.assertThrows(IllegalArgumentException.class, solver::solve);
-    }
 
 }

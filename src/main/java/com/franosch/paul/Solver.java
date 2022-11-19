@@ -23,10 +23,14 @@ public class Solver {
         FileReader fileReader = new FileReader(useTestResources);
         final Graph graph = fileReader.read("huepfburg" + number);
 
-        final int cap = 10000;
+        final int cap = graph.getNodes().size() * graph.getNodes().size();
 
         Result result = findTargetNode(graph, cap);
-        if (result == null) throw new NullPointerException("THERE WAS NO RESULT FOUND IN " + cap + " STEPS!");
+        if (result == null) {
+            System.out.println("Es konnte kein passender Knoten in " + cap + " Schritten ermittelt werden!");
+            System.out.println("Der Parkour ist unlösbar.");
+            System.exit(0);
+        }
 
         Node a = new Node(1);
         Node b = new Node(2);
@@ -61,10 +65,10 @@ public class Solver {
                     return new Result(i, new Node(j + 1));
                 }
             }
-
-            if (isNew(previous, exp)) {
+            int alreadyInSet = isNew(previous, exp);
+            if (alreadyInSet != -1) {
                 System.out.println("Es ist nicht möglich den Parkour erfolgreich zu absolvieren, Matrix in Schritt "
-                        + (previous.size() + 1) + " ist identisch zu einer vorherigen Matrix.");
+                        + (previous.size() + 1) + " ist identisch zu der vorherigen Matrix in Schritt " + (alreadyInSet + 1) + ".");
                 System.exit(0);
             }
             previous.add(exp);
@@ -74,15 +78,15 @@ public class Solver {
         return null;
     }
 
-    private boolean isNew(List<Matrix> matrices, Matrix matrix) {
+    private int isNew(List<Matrix> matrices, Matrix matrix) {
         for (int i = 0; i < matrices.size(); i++) {
             final Matrix current = matrices.get(i);
             if (current.equals(matrix)) {
                 System.out.println(matrix + " is the same as matrix with index " + i + ": " + current);
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     private Set<List<Node>> showNeighbours(Graph graph, Node start, Node target, int steps) {
