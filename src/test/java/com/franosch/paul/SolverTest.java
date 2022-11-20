@@ -30,7 +30,7 @@ public class SolverTest {
 
     @Test
     void solve0() {
-        Solver solver = new Solver(4, true);
+        Solver solver = new Solver(3, true);
         Assertions.assertDoesNotThrow(solver::solve);
     }
 

@@ -24,12 +24,13 @@ public class Solver {
         final Graph graph = fileReader.read("huepfburg" + number);
 
         final int cap = graph.getNodes().size() * graph.getNodes().size();
-
+        long startTime = System.currentTimeMillis();
         Result result = findTargetNode(graph, cap);
+        long afterResult = System.currentTimeMillis();
         if (result == null) {
-            System.out.println("Es konnte kein passender Knoten in " + cap + " Schritten ermittelt werden!");
             System.out.println("Der Parkour ist unlösbar.");
-            System.exit(0);
+            System.out.println("Matrizen: " + (afterResult - startTime));
+            return;
         }
 
         Node a = new Node(1);
@@ -38,13 +39,16 @@ public class Solver {
         Set<List<Node>> pathFromA = showNeighbours(graph, a, result.node, result.steps);
         solutionFound = false;
         Set<List<Node>> pathFromB = showNeighbours(graph, b, result.node, result.steps);
-
+        long afterDFS = System.currentTimeMillis();
         for (final List<Node> nodes : pathFromA) {
             System.out.println("Pfad von 1 nach " + result.node.id() + ": " + nodes);
         }
         for (final List<Node> nodes : pathFromB) {
             System.out.println("Pfad von 2 nach " + result.node.id() + ": " + nodes);
         }
+
+        System.out.println("Matrizen: " + (afterResult - startTime));
+        System.out.println("DFS: " + (afterDFS - afterResult));
 
     }
 
@@ -69,12 +73,12 @@ public class Solver {
             if (alreadyInSet != -1) {
                 System.out.println("Es ist nicht möglich den Parkour erfolgreich zu absolvieren, Matrix in Schritt "
                         + (previous.size() + 1) + " ist identisch zu der vorherigen Matrix in Schritt " + (alreadyInSet + 1) + ".");
-                System.exit(0);
+                return null;
             }
             previous.add(exp);
 
         }
-        System.out.println("No solution found in range 0 to " + cap);
+        System.out.println("Es konnte kein passender Knoten in " + cap + " Schritten ermittelt werden!");
         return null;
     }
 

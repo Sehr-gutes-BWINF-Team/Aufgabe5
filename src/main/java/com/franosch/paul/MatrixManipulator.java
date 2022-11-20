@@ -24,7 +24,10 @@ public class MatrixManipulator {
         for (int i = 0; i < aRows; i++) { // aRow
             for (int j = 0; j < bColumns; j++) { // bColumn
                 for (int k = 0; k < aColumns; k++) { // aColumn
-                    result[i][j] += valuesA[i][k] * valuesB[k][j]; // abbrechen nach 1 möglich → laufzeitverbesserung
+                    int sum = result[i][j];
+                    if (sum == 0) {
+                        result[i][j] = valuesA[i][k] * valuesB[k][j]; // abbrechen nach 1 möglich → laufzeitverbesserung
+                    }
                 }
             }
         }
