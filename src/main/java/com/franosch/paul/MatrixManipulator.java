@@ -35,18 +35,4 @@ public class MatrixManipulator {
         return new Matrix(result);
     }
 
-    public static Matrix add(Matrix a, Matrix b) {
-        // add matrices
-        final int[][] valuesA = a.values();
-        final int[][] valuesB = b.values();
-
-        int[][] values = new int[valuesA.length][valuesA[0].length];
-        for (int i = 0; i < valuesA.length; i++) {
-            for (int j = 0; j < valuesA[0].length; j++) {
-                values[i][j] = valuesA[i][j] + valuesB[i][j];
-            }
-        }
-        return new Matrix(values);
-    }
-
 }
