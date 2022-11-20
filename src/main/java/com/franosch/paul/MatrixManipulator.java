@@ -70,16 +70,10 @@ public class MatrixManipulator {
         Matrix current = matrix;
         for (int i = 0; i < exponent - 1; i++) {
             current = multiply(current, matrix);
-            for (int j = 0; j < current.values().length; j++) {
-                for (int k = 0; k < current.values()[j].length; k++) {
-                    if (current.values()[j][k] != 0) {
-                        current.values()[j][k] = 1;
-                    }
-                }
-            }
         }
         return current;
     }
+
 
 
     public static Matrix calcReachableNodes(Matrix matrix, int steps) {

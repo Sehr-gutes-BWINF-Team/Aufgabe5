@@ -53,14 +53,13 @@ public class Solver {
     }
 
     private Result findTargetNode(Graph graph, int cap) {
-        Matrix matrix = graph.toAdjacencyMatrix();
+        Matrix adjacencyMatrix = graph.toAdjacencyMatrix();
 
         List<Matrix> previous = new ArrayList<>();
-
+        Matrix current = adjacencyMatrix;
         for (int i = 1; i < cap; i++) {
-            Matrix exp = MatrixManipulator.expButMakeItStupid(matrix, i);
-            int[] reachableFirst = exp.values()[0];
-            int[] reachableSecond = exp.values()[1];
+            int[] reachableFirst = current.values()[0];
+            int[] reachableSecond = current.values()[1];
 
             for (int j = 0; j < reachableFirst.length; j++) {
                 if (reachableFirst[j] != 0 && reachableFirst[j] == reachableSecond[j]) {
@@ -69,14 +68,15 @@ public class Solver {
                     return new Result(i, new Node(j + 1));
                 }
             }
-            int alreadyInSet = isNew(previous, exp);
+            int alreadyInSet = isNew(previous, current);
             if (alreadyInSet != -1) {
                 System.out.println("Es ist nicht möglich den Parkour erfolgreich zu absolvieren, Matrix in Schritt "
                         + (previous.size() + 1) + " ist identisch zu der vorherigen Matrix in Schritt " + (alreadyInSet + 1) + ".");
                 return null;
             }
-            previous.add(exp);
+            previous.add(current);
 
+            current = MatrixManipulator.multiply(current, adjacencyMatrix);
         }
         System.out.println("Es konnte kein passender Knoten in " + cap + " Schritten ermittelt werden!");
         return null;

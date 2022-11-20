@@ -21,16 +21,35 @@ public class SolverTest {
         Assertions.assertNotNull(graph);
         Matrix matrix = graph.toAdjacencyMatrix();
         Assertions.assertNotNull(matrix);
-        System.out.println(matrix);
-        Matrix exp = MatrixManipulator.exp(matrix, 2);
-        System.out.println("Path length 2: " + exp);
-        Matrix reachableNodes = MatrixManipulator.calcReachableNodes(matrix, 2);
-        System.out.println("Reachable step 2: " + reachableNodes);
     }
 
     @Test
     void solve0() {
+        Solver solver = new Solver(0, true);
+        Assertions.assertDoesNotThrow(solver::solve);
+    }
+
+    @Test
+    void solve1() {
+        Solver solver = new Solver(1, true);
+        Assertions.assertDoesNotThrow(solver::solve);
+    }
+
+    @Test
+    void solve2() {
+        Solver solver = new Solver(2, true);
+        Assertions.assertDoesNotThrow(solver::solve);
+    }
+
+    @Test
+    void solve3() {
         Solver solver = new Solver(3, true);
+        Assertions.assertDoesNotThrow(solver::solve);
+    }
+
+    @Test
+    void solve4() {
+        Solver solver = new Solver(4, true);
         Assertions.assertDoesNotThrow(solver::solve);
     }
 
