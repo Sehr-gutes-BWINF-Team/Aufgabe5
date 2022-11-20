@@ -1,14 +1,12 @@
 package com.franosch.paul;
 
 import com.franosch.paul.io.FileReader;
-import com.franosch.paul.model.Edge;
 import com.franosch.paul.model.Graph;
 import com.franosch.paul.model.Matrix;
 import com.franosch.paul.model.Node;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.math.BigInteger;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -29,27 +27,23 @@ public class Solver {
         long afterResult = System.currentTimeMillis();
         if (result == null) {
             System.out.println("Der Parkour ist unlösbar.");
-            System.out.println("Matrizen: " + (afterResult - startTime));
+            System.out.println("Dauer Zielknoten finden via Matrizen: " + (afterResult - startTime));
             return;
         }
 
         Node a = new Node(1);
         Node b = new Node(2);
 
-        Set<List<Node>> pathFromA = showNeighbours(graph, a, result.node, result.steps);
+        Set<List<Node>> pathFromA = findPathViaDFS(graph, a, result.node, result.steps);
         solutionFound = false;
-        Set<List<Node>> pathFromB = showNeighbours(graph, b, result.node, result.steps);
-        long afterDFS = System.currentTimeMillis();
+        Set<List<Node>> pathFromB = findPathViaDFS(graph, b, result.node, result.steps);
         for (final List<Node> nodes : pathFromA) {
             System.out.println("Pfad von 1 nach " + result.node.id() + ": " + nodes);
         }
         for (final List<Node> nodes : pathFromB) {
             System.out.println("Pfad von 2 nach " + result.node.id() + ": " + nodes);
         }
-
-        System.out.println("Matrizen: " + (afterResult - startTime));
-        System.out.println("DFS: " + (afterDFS - afterResult));
-
+        System.out.println("Dauer Zielknoten finden via Matrizen: " + (afterResult - startTime));
     }
 
     private Result findTargetNode(Graph graph, int cap) {
@@ -63,7 +57,6 @@ public class Solver {
 
             for (int j = 0; j < reachableFirst.length; j++) {
                 if (reachableFirst[j] != 0 && reachableFirst[j] == reachableSecond[j]) {
-                    // System.out.println("MATRIX " + exp);
                     System.out.println("SOLUTION IS NODE " + (j + 1) + " IN " + i + " STEPS");
                     return new Result(i, new Node(j + 1));
                 }
@@ -93,17 +86,16 @@ public class Solver {
         return -1;
     }
 
-    private Set<List<Node>> showNeighbours(Graph graph, Node start, Node target, int steps) {
+    private Set<List<Node>> findPathViaDFS(Graph graph, Node start, Node target, int steps) {
         Set<List<Node>> paths = new HashSet<>();
-        showNeighbours(graph, start, target, 0, new ArrayList<>(), paths, steps);
+        findPathViaDFS(graph, start, target, 0, new ArrayList<>(), paths, steps);
         return paths;
     }
 
-    private void showNeighbours(Graph graph, Node current, Node target, int depth,
+    private void findPathViaDFS(Graph graph, Node current, Node target, int depth,
                                 List<Node> path, Set<List<Node>> paths, int steps) {
         if (solutionFound) return;
         path.add(current);
-        // System.out.println("current " + current + " target " + target + " depth " + depth + " steps " + steps);
         if (depth == steps) {
             if (current.equals(target)) {
                 paths.add(path);
@@ -115,7 +107,7 @@ public class Solver {
         final Set<Node> nodes = graph.getNeighbours().get(current);
         for (Node node : nodes) {
             int depthNew = depth + 1;
-            showNeighbours(graph, node, target, depthNew, new ArrayList<>(path), paths, steps);
+            findPathViaDFS(graph, node, target, depthNew, new ArrayList<>(path), paths, steps);
         }
     }
 

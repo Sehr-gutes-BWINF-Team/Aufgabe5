@@ -49,48 +49,4 @@ public class MatrixManipulator {
         return new Matrix(values);
     }
 
-    // https://stackoverflow.com/a/1375033
-    public static Matrix getIdentity(int size) {
-        int[][] values = new int[size][size];
-        for (int i = 0; i < size; i++) {
-            values[i][i] = 1;
-        }
-        return new Matrix(values);
-    }
-
-    public static Matrix exp(Matrix matrix, int exponent) {
-        Matrix current = matrix;
-        for (int i = 0; i < exponent - 1; i++) {
-            current = multiply(current, matrix);
-        }
-        return current;
-    }
-
-    public static Matrix expButMakeItStupid(Matrix matrix, int exponent) {
-        Matrix current = matrix;
-        for (int i = 0; i < exponent - 1; i++) {
-            current = multiply(current, matrix);
-        }
-        return current;
-    }
-
-
-
-    public static Matrix calcReachableNodes(Matrix matrix, int steps) {
-        Matrix current = getIdentity(matrix.getLength());
-        for (int i = 0; i < steps; i++) {
-            Matrix exp = exp(matrix, i + 1);
-            current = add(current, exp);
-        }
-
-        for (final int[] value : current.values()) {
-            for (int i = 0; i < value.length; i++) {
-                if (value[i] != 0) {
-                    value[i] = 1;
-                }
-            }
-        }
-        return current;
-    }
-
 }
